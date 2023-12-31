@@ -5,6 +5,8 @@ import 'package:traccar/View/auth_view/login_screen.dart';
 
 import '../../Constants/colors.dart';
 
+import '../../Constants/colors.dart';
+
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
