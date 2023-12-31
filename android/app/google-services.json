@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "957861992899",
+    "project_id": "airtrack-gps-cf7b0",
+    "storage_bucket": "airtrack-gps-cf7b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:957861992899:android:92eac057bc377e3f2a4576",
+        "android_client_info": {
+          "package_name": "com.example.traccar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "957861992899-15e3te14lo6n858l7pb8c8irk9btflt7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSgFAy5aJIOfrdHiYbz43FawkaR7ma0vM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "957861992899-15e3te14lo6n858l7pb8c8irk9btflt7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
