@@ -1,74 +1,163 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:traccar/Constants/colors.dart';
-import 'package:traccar/View/home_screen/home_screen.dart';
-import 'package:traccar/Widgets/buttons/elevated_button/k_elevated_button.dart';
+import 'package:traccar/View/auth_view/signup_screen.dart';
 import 'package:traccar/Widgets/form_fields/k_text.dart';
 import 'package:traccar/Widgets/form_fields/k_text_field.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool _obscureText = true;
+
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        body: Container(
+        body: SizedBox(
           width: size.width,
           height: size.height,
           child: Center(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0, vertical: 10.0),
                 child: Column(
                   children: [
-                    KText(text: "Welcome! Log In", fontSize: 20, fontWeight: FontWeight.bold,),
-                    Gap(5),
-                    KText(text: "Enter your Credentials", fontSize: 12, fontWeight: FontWeight.normal,),
-                    Gap(20),
-                    TextInputFieldWidget(
-                      hintText: "Email",
-                      lable: "Email",
-                      isEmail: true,
-                      prefixIcon: Icon(Icons.email_outlined),
+                    KText(
+                      text: "Login",
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Gap(20),
+                    const Gap(20),
                     TextInputFieldWidget(
-                      hintText: "Password",
+                      controller: emailController,
+                      hintText: "user@gmail.com",
+                      lable: "Email",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      isEmail: true,
+                    ),
+                    const Gap(20),
+                    TextInputFieldWidget(
+                      controller: passwordController,
+                      hintText: "********",
                       lable: "Password",
                       isPasswordNo: true,
-                      prefixIcon: Icon(Icons.lock_outline),
-                      suffixIcon: Icon(Icons.remove_red_eye_outlined),
+                      obscure: _obscureText,
+                      maxLines: 1,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      suffixIcon: GestureDetector(
+                        onTap: _toggle,
+                        child: Icon(
+                         ! _obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                      ),
                     ),
-                    Gap(20),
-                    KElevatedButton(
-                      title: KText(text: "LOG IN",color: kWhiteColor,fontSize: 18), isEnable: true.obs, onPressed: (){
-                        Get.to(() => HomeScreen());
-                    },),
-                    Gap(20),
-                    KText(text: "OR", fontSize: 12, fontWeight: FontWeight.normal,),
-                    Gap(20),
-                    KElevatedButton(
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Row(
                         children: [
-                          Icon(MdiIcons.google,color: Colors.red,),
-                          Gap(10),
-                          KText(text: "CREATE ACCOUNT WITH GOOGLE", fontSize: 16,color: kWhiteColor, fontWeight: FontWeight.bold,),
+                          KText(
+                            text: "Forgot Password?",
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                          ),
+                          TextButton(
+                            onPressed: () {},
+                            child: KText(
+                              text: "Reset",
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                              color: kPrimaryColor,
+                            ),
+                          ),
                         ],
-                      ), isEnable: true.obs, onPressed: (){},),
-                  ]
+                      ),
+                    ),
+                    const Gap(20),
+                    FilledButton(
+                      onPressed: () {},
+                      child: KText(
+                        text: "Login",
+                        color: kWhiteColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    const Gap(20),
+                    OutlinedButton(
+                      onPressed: () {},
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          KText(
+                            text: "Login with Google",
+                            color: kPrimaryColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal,
+                          ),
+                          const Gap(10),
+                          SvgPicture.asset(
+                            'assets/svg/google-logo.svg',
+                            width: 28,
+                            height: 28,
+                            // Other properties like color, alignment, etc.
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Gap(50),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        KText(
+                          text: "Don’t have an account?",
+                          fontSize: 12,
+                          fontWeight: FontWeight.normal,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Get.to(SignUpScreen());
+                          },
+                          child: KText(
+                            text: "Signup",
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                            color: kPrimaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-        )
+        ),
       ),
     );
   }

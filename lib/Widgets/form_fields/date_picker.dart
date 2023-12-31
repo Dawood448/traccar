@@ -46,7 +46,7 @@ class _InputDateSelectionTextFieldState
       controller: widget.controller,
       cursorColor: kBlackColor,
       onChanged: widget.onChange,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 12.0,
         fontWeight: FontWeight.normal,
       ), //editing controller of this TextField
@@ -59,13 +59,13 @@ class _InputDateSelectionTextFieldState
         enabledBorder: outlineInputBorder,
         focusedBorder: outlineInputActiveBorderBlue,
         prefixIconColor: kBlackColor,
-        contentPadding: EdgeInsets.only(left: 10,right: 20),
+        contentPadding: const EdgeInsets.only(left: 10,right: 20),
         border: InputBorder.none,
         //fillColor: const Color.fromARGB(255, 251, 250, 249),
         fillColor: Colors.transparent,
         filled: true,
         hintText: widget.hintText,
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: kMainColor,
           fontSize: 12,
         ),
@@ -114,9 +114,9 @@ class _InputDateSelectionTextFieldState
   }
   final OutlineInputBorder outlineInputActiveBorderBlue = OutlineInputBorder(
     borderRadius: BorderRadius.circular(5),
-    borderSide:   BorderSide(color: kMainColor,width: 2), // Green border color
+    borderSide:   const BorderSide(color: kMainColor,width: 2), // Green border color
   );
   final OutlineInputBorder outlineInputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(5),
-      borderSide: BorderSide(color: kMainColor));
+      borderSide: const BorderSide(color: kMainColor));
 }

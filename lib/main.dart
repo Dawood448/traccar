@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'Constants/theme.dart';
 import 'View/Splash/splash_screen.dart';
+import 'View/auth_view/login_screen.dart';
+import 'View/auth_view/signup_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'TracCar',
       theme: AppTheme.lightTheme(context),
-      home: const SplashScreen(),
+      home:  SignUpScreen(),
     );
   }
 }
