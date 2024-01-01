@@ -9,6 +9,7 @@ import '../Data/Local/hive_storage.dart';
 import '../Data/Network/request_client.dart';
 import '../Utils/common.dart';
 import '../Utils/logging.dart';
+import '../View/home_screen/home_screen.dart';
 
 class AuthController extends GetxController {
   static AuthController get instance => Get.find();
@@ -16,7 +17,7 @@ class AuthController extends GetxController {
 
   @override
   void onInit() {
-    // checkAuth();
+    checkAuth();
     super.onInit();
   }
 
@@ -26,35 +27,34 @@ class AuthController extends GetxController {
   //   update();
   // }
 
-  // Future<void> checkAuth() async {
-  //   try {
-  //     String? accessToken = LocalStorage.getAccessToken;
-  //     if (accessToken != null) {
-  //       var response = await NetworkClient.get(Apis.currentUser);
-  //       routeOnUser(response);
-  //     } else {
-  //       await logOut();
-  //     }
-  //   } on DioException catch (e) {
-  //     Logger.message('Error: ${e.toString()}');
-  //     await logOut();
-  //   } catch (error) {
-  //     Logger.message('Error: `${error.toString()}');
-  //     await logOut();
-  //   }
-  // }
+  Future<void> checkAuth() async {
+    try {
+      String? accessToken = LocalStorage.getAccessToken;
+      if (accessToken != null) {
+        print(accessToken);
+        // var response = await NetworkClient.get(Apis.currentUser);
+        // routeOnUser(response);
+      } else {
+        await logOut();
+      }
+    } on DioException catch (e) {
+      Logger.message('Error: ${e.toString()}');
+      await logOut();
+    } catch (error) {
+      Logger.message('Error: `${error.toString()}');
+      await logOut();
+    }
+  }
 
   Future<void> signUp(BuildContext context,
       {required String email,
       required String password,
-      required String name,
       required String confirmPassword}) async {
     try {
       final response = await NetworkClient.post(
         Apis.signUp,
         data: {
           "email": email,
-          "name": name,
           "confirmed": confirmPassword,
           "password": password
         },
@@ -93,8 +93,9 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> signInWithGoogle(BuildContext context,
-      {required String role}) async {
+  Future<void> signInWithGoogle(
+    BuildContext context,
+  ) async {
     try {
       final GoogleSignInAccount? googleUser =
           await GoogleSignIn(scopes: ['email', 'profile']).signIn();
@@ -114,9 +115,12 @@ class AuthController extends GetxController {
       }
       final response = await NetworkClient.post(
         Apis.socialSignIn,
-        data: {'name': googleUser?.displayName, 'email': googleUser?.email},
+        data: {"name": googleUser?.displayName, "email": googleUser?.email},
       );
-      print(response.statusCode);
+      if (response.statusCode == 200) {
+        Get.to(const HomeScreen());
+      }
+      // print(response.data);
       // routeOnUser(response);
     } on DioException catch (e) {
       log('${e.error} \n ${e.message} \n ${e.response} \n ${e.type}'
@@ -130,7 +134,7 @@ class AuthController extends GetxController {
           context: context,
           builder: (context) {
             return AlertDialog.adaptive(
-              title: Text('Exception: ${error}'),
+              title: Text('Exception: $error'),
             );
           });
     }

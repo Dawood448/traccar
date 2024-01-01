@@ -9,23 +9,22 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: size.width,
         height: size.height,
-        child: FlutterMap(options: MapOptions(
+        child: FlutterMap(
+          options: const MapOptions(
             center: LatLng(51.5, -0.09),
             zoom: 14.0,
-
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              subdomains: const ['a', 'b', 'c'],
+            )
+          ],
         ),
-
-            children: [
-              TileLayer(
-                urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                subdomains: ['a', 'b', 'c'],
-              )
-        ]
-      )
-      )
+      ),
     );
   }
 }

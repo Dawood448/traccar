@@ -6,6 +6,8 @@ import 'package:traccar/Constants/colors.dart';
 import 'package:traccar/View/auth_view/signup_screen.dart';
 import 'package:traccar/Widgets/form_fields/k_text.dart';
 import 'package:traccar/Widgets/form_fields/k_text_field.dart';
+import '../../Controller/auth_controller.dart';
+import '../../Utils/over_lay.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -68,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       suffixIcon: GestureDetector(
                         onTap: _toggle,
                         child: Icon(
-                         ! _obscureText
+                          !_obscureText
                               ? Icons.visibility
                               : Icons.visibility_off,
                           color: Colors.grey,
@@ -85,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontWeight: FontWeight.normal,
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () async {},
                             child: KText(
                               text: "Reset",
                               fontSize: 12,
@@ -108,7 +110,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const Gap(20),
                     OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        kOverlayWithAsync(asyncFunction: () async {
+                          await AuthController().signInWithGoogle(context);
+                        });
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,

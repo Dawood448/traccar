@@ -24,6 +24,8 @@ class NetworkClient {
       {Map<String, dynamic>? data,
       bool isTokenRequired = true,
       Map<String, dynamic>? header}) async {
+    print("-----------");
+
     return await dio.post(
       url,
       data: data,

@@ -40,24 +40,16 @@ class AppTheme {
           borderRadius: BorderRadius.circular(8),
 
         ),
-        focusedBorder: outlineInputActiveBorderBlue,
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: outlineB),
+          borderRadius: BorderRadius.circular(8),
+        ),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: outlineB),
           borderRadius: BorderRadius.circular(8),
         ),
-        errorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: outlineB),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       ),
     );
   }
 }
-final OutlineInputBorder outlineInputActiveBorderBlue = OutlineInputBorder(
-  borderRadius: BorderRadius.circular(5),
-  borderSide:   BorderSide(color: outlineB, width: 2), // Green border color
-);
-final OutlineInputBorder outlineInputBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(5),
-    borderSide: BorderSide(color: outlineB));
