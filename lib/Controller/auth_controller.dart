@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:traccar/model/login_model/login_model.dart';
 import '../Constants/api.dart';
 import '../Data/Local/hive_storage.dart';
 import '../Data/Network/request_client.dart';
@@ -32,6 +34,7 @@ class AuthController extends GetxController {
       String? accessToken = LocalStorage.getAccessToken;
       if (accessToken != null) {
         print(accessToken);
+        Get.offAll(HomeScreen());
         // var response = await NetworkClient.get(Apis.currentUser);
         // routeOnUser(response);
       } else {
@@ -48,19 +51,30 @@ class AuthController extends GetxController {
 
   Future<void> signUp(BuildContext context,
       {required String email,
+        required String name,
       required String password,
       required String confirmPassword}) async {
+
     try {
       final response = await NetworkClient.post(
         Apis.signUp,
         data: {
           "email": email,
+          "name": name,
           "confirmed": confirmPassword,
           "password": password
         },
         isTokenRequired: false,
       );
       Logger.message('Status Code: ${response.statusCode}');
+      if(response.statusCode != 200 ){
+        Logger.error('Login Failed');
+        return;
+      }
+
+      var model = LoginModel.fromJson(response.data);
+      LocalStorage.setUser(model.user!.id.toString(), model.token);
+      Get.offAll(HomeScreen());
       // routeOnUser(response);
     } on DioException catch (e) {
       Logger.message('Error: $e');
@@ -84,6 +98,14 @@ class AuthController extends GetxController {
       );
 
       Logger.message('Status Code: ${response.statusCode}');
+      if(response.statusCode != 200 ){
+        Logger.error('Login Failed');
+        return;
+      }
+
+      var model = LoginModel.fromJson(response.data);
+      LocalStorage.setUser(model.user!.id.toString(), model.token);
+      Get.offAll(HomeScreen());
       // routeOnUser(response);
     } on DioException catch (e) {
       Logger.message('Error: $e');
@@ -113,11 +135,13 @@ class AuthController extends GetxController {
         print('Photo Url: ${googleUser?.photoUrl}');
         print('ID: ${googleUser?.id}');
       }
+
       final response = await NetworkClient.post(
         Apis.socialSignIn,
         data: {"name": googleUser?.displayName, "email": googleUser?.email},
       );
       if (response.statusCode == 200) {
+        LocalStorage.setUser(googleUser!.id, googleAuth.accessToken);
         Get.to(const HomeScreen());
       }
       // print(response.data);

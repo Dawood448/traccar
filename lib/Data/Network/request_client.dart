@@ -17,7 +17,7 @@ class NetworkClient {
       options: Options(
         headers: headers(isTokenRequired: isTokenRequired),
       ),
-    );
+    ).timeout(const Duration(seconds: 30));
   }
 
   static Future<Response> post(String url,
@@ -32,7 +32,7 @@ class NetworkClient {
       options: Options(
         headers: header ?? headers(isTokenRequired: isTokenRequired),
       ),
-    );
+    ).timeout(const Duration(seconds: 30));
   }
 
   static Future<Response> put(String url,
@@ -43,7 +43,7 @@ class NetworkClient {
       options: Options(
         headers: headers(isTokenRequired: isTokenRequired),
       ),
-    );
+    ).timeout(const Duration(seconds: 30));
   }
 
   static Future<Response> delete(String url,
@@ -54,7 +54,7 @@ class NetworkClient {
       options: Options(
         headers: headers(isTokenRequired: isTokenRequired),
       ),
-    );
+    ).timeout(const Duration(seconds: 30));
   }
 
   static Map<String, dynamic> headers({bool isTokenRequired = true}) {

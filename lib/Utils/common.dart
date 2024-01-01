@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../Constants/colors.dart';
 import 'logging.dart';
@@ -98,5 +99,57 @@ class Common {
             ],
           );
         });
+  }
+}
+class AppSnackbar {
+  static void showErrorSnackBar(String message) {
+    Get.snackbar(
+      'Error',
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: kErrorColor,
+      colorText: kWhiteColor,
+      icon: const Icon(
+        Icons.error_outline,
+        color: kWhiteColor,
+      ),
+      margin: const EdgeInsets.all(10),
+      borderRadius: 10,
+      duration: const Duration(seconds: 3),
+    );
+  }
+
+  static void showWarningSnackbar(String message) {
+    Get.snackbar(
+      'Warning',
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: kErrorColor,
+      colorText: kWhiteColor,
+      icon: const Icon(
+        Icons.warning_amber_outlined,
+        color: kWhiteColor,
+      ),
+      margin: const EdgeInsets.all(10),
+      borderRadius: 10,
+      duration: const Duration(seconds: 3),
+    );
+  }
+
+  static void showSuccessSnackbar(String message) {
+    Get.snackbar(
+      'Success',
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: kGreenColor,
+      colorText: kWhiteColor,
+      icon: const Icon(
+        Icons.check_circle_outline,
+        color: kWhiteColor,
+      ),
+      margin: const EdgeInsets.all(10),
+      borderRadius: 10,
+      duration: const Duration(seconds: 3),
+    );
   }
 }

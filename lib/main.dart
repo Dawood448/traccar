@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:traccar/Controller/auth_controller.dart';
 import 'Constants/theme.dart';
 import 'Data/Local/hive_storage.dart';
 import 'View/Splash/splash_screen.dart';
@@ -14,6 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Get.put(AuthController());
   runApp(const MyApp());
 }
 
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'TracCar',
       theme: AppTheme.lightTheme(context),
-      home: SignUpScreen(),
+      home: LoginScreen(),
     );
   }
 }
