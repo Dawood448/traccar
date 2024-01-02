@@ -20,21 +20,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   bool _obscureText = true;
   bool _obscureTextConfirm = true;
-  final _authController  = Get.put(AuthController());
+  final _authController = Get.put(AuthController());
   void _toggle() {
     setState(() {
       _obscureText = !_obscureText;
     });
   }
+
   void _toggleConfirm() {
     setState(() {
       _obscureTextConfirm = !_obscureTextConfirm;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -48,8 +51,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           height: size.height,
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0, vertical: 10.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
               child: SingleChildScrollView(
                 child: Form(
                   key: _formkey,
@@ -65,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controller: nameController,
                         hintText: "User Name",
                         lable: "Name",
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                       ),
                       const Gap(20),
                       TextInputFieldWidget(
@@ -73,7 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         hintText: "user@gmail.com",
                         lable: "Email",
                         textInputType: TextInputType.emailAddress,
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         isEmail: true,
                       ),
                       const Gap(20),
@@ -81,14 +84,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controller: passwordController,
                         hintText: "********",
                         lable: "Password",
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         isPasswordNo: true,
                         obscure: _obscureText,
                         maxLines: 1,
                         suffixIcon: GestureDetector(
                           onTap: _toggle,
                           child: Icon(
-                            ! _obscureText
+                            _obscureText
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color: Colors.grey,
@@ -100,14 +103,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controller: confirmPasswordController,
                         hintText: "********",
                         lable: "Confirm Password",
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         isPasswordNo: true,
                         obscure: _obscureTextConfirm,
                         maxLines: 1,
                         suffixIcon: GestureDetector(
                           onTap: _toggleConfirm,
                           child: Icon(
-                            ! _obscureTextConfirm
+                            _obscureTextConfirm
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color: Colors.grey,
@@ -117,11 +120,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const Gap(40),
                       FilledButton(
                         onPressed: () {
-                          if(_formkey.currentState!.validate()){
+                          if (_formkey.currentState!.validate()) {
                             kOverlayWithAsync(asyncFunction: () async {
-                             await _authController.signUp(context, email: emailController.text, password: passwordController.text, name: nameController.text , confirmPassword: confirmPasswordController.text);
+                              await _authController.signUp(context,
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                  name: nameController.text,
+                                  confirmPassword:
+                                      confirmPasswordController.text);
                             });
-
                           }
                         },
                         child: KText(
@@ -133,13 +140,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       const Gap(20),
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          kOverlayWithAsync(asyncFunction: () async {
+                            await AuthController().signInWithGoogle(context);
+                          });
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             KText(
-                              text: "Signup with Google",
+                              text: "Continue with Google",
                               color: kPrimaryColor,
                               fontSize: 18,
                               fontWeight: FontWeight.normal,
@@ -166,7 +177,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Get.to(LoginScreen());
+                              Get.to(const LoginScreen());
                             },
                             child: KText(
                               text: "Login",

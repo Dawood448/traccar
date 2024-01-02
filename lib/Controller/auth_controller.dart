@@ -33,8 +33,8 @@ class AuthController extends GetxController {
     try {
       String? accessToken = LocalStorage.getAccessToken;
       if (accessToken != null) {
-        print(accessToken);
-        Get.offAll(HomeScreen());
+        // print(accessToken);
+        Get.offAll(const HomeScreen());
         // var response = await NetworkClient.get(Apis.currentUser);
         // routeOnUser(response);
       } else {
@@ -51,10 +51,9 @@ class AuthController extends GetxController {
 
   Future<void> signUp(BuildContext context,
       {required String email,
-        required String name,
+      required String name,
       required String password,
       required String confirmPassword}) async {
-
     try {
       final response = await NetworkClient.post(
         Apis.signUp,
@@ -67,14 +66,14 @@ class AuthController extends GetxController {
         isTokenRequired: false,
       );
       Logger.message('Status Code: ${response.statusCode}');
-      if(response.statusCode != 200 ){
+      if (response.statusCode != 200) {
         Logger.error('Login Failed');
         return;
       }
 
       var model = LoginModel.fromJson(response.data);
       LocalStorage.setUser(model.user!.id.toString(), model.token);
-      Get.offAll(HomeScreen());
+      Get.offAll(const HomeScreen());
       // routeOnUser(response);
     } on DioException catch (e) {
       Logger.message('Error: $e');
@@ -98,14 +97,14 @@ class AuthController extends GetxController {
       );
 
       Logger.message('Status Code: ${response.statusCode}');
-      if(response.statusCode != 200 ){
+      if (response.statusCode != 200) {
         Logger.error('Login Failed');
         return;
       }
 
       var model = LoginModel.fromJson(response.data);
       LocalStorage.setUser(model.user!.id.toString(), model.token);
-      Get.offAll(HomeScreen());
+      Get.offAll(const HomeScreen());
       // routeOnUser(response);
     } on DioException catch (e) {
       Logger.message('Error: $e');
@@ -141,7 +140,8 @@ class AuthController extends GetxController {
         data: {"name": googleUser?.displayName, "email": googleUser?.email},
       );
       if (response.statusCode == 200) {
-        LocalStorage.setUser(googleUser!.id, googleAuth.accessToken);
+        LocalStorage.setUser(
+            googleAuth.idToken.toString(), googleAuth.accessToken);
         Get.to(const HomeScreen());
       }
       // print(response.data);

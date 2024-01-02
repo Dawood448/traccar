@@ -90,9 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.normal,
                             ),
                             TextButton(
-                              onPressed: () async {
-
-                              },
+                              onPressed: () async {},
                               child: KText(
                                 text: "Reset",
                                 fontSize: 12,
@@ -106,9 +104,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Gap(20),
                       FilledButton(
                         onPressed: () {
-                          if(_formkey.currentState!.validate()){
+                          if (_formkey.currentState!.validate()) {
                             kOverlayWithAsync(asyncFunction: () async {
-                              await AuthController().signIn(context, email: emailController.text, password: passwordController.text);
+                              await AuthController().signIn(context,
+                                  email: emailController.text,
+                                  password: passwordController.text);
                             });
                           }
                         },
@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Get.to(SignUpScreen());
+                              Get.to(const SignUpScreen());
                             },
                             child: KText(
                               text: "Signup",
