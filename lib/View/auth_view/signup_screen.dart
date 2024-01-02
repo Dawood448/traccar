@@ -68,7 +68,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controller: nameController,
                         hintText: "User Name",
                         lable: "Name",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
                       ),
                       const Gap(20),
                       TextInputFieldWidget(
@@ -76,7 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         hintText: "user@gmail.com",
                         lable: "Email",
                         textInputType: TextInputType.emailAddress,
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
+
                         isEmail: true,
                       ),
                       const Gap(20),
@@ -84,7 +83,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controller: passwordController,
                         hintText: "********",
                         lable: "Password",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         isPasswordNo: true,
                         obscure: _obscureText,
                         maxLines: 1,
@@ -103,7 +101,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controller: confirmPasswordController,
                         hintText: "********",
                         lable: "Confirm Password",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         isPasswordNo: true,
                         obscure: _obscureTextConfirm,
                         maxLines: 1,
