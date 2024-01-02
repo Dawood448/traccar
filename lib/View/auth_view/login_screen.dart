@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool _obscureText = true;
-  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   void _toggle() {
     setState(() {
@@ -48,12 +48,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   key: _formkey,
                   child: Column(
                     children: [
+                      SvgPicture.asset(
+                        'assets/svg/logo.svg',
+                        height: 55,
+                        width: 140,
+                      ),
+                      const Gap(40),
                       KText(
                         text: "Login",
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
-                      const Gap(20),
+                      const Gap(30),
                       TextInputFieldWidget(
                         controller: emailController,
                         hintText: "user@gmail.com",
@@ -146,35 +152,34 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                       ),
-                      const Gap(50),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          KText(
-                            text: "Don’t have an account?",
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Get.to(const SignUpScreen());
-                            },
-                            child: KText(
-                              text: "Signup",
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                              color: kPrimaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),
               ),
             ),
           ),
+        ),
+        bottomNavigationBar: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            KText(
+              text: "Don’t have an account?",
+              fontSize: 12,
+              fontWeight: FontWeight.normal,
+            ),
+            TextButton(
+              onPressed: () {
+                Get.to(const SignUpScreen());
+              },
+              child: KText(
+                text: "Signup",
+                fontSize: 12,
+                fontWeight: FontWeight.normal,
+                color: kPrimaryColor,
+              ),
+            ),
+          ],
         ),
       ),
     );

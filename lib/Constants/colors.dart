@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 
 Map<int, Color> color = {
-  50: const Color.fromRGBO(255, 255, 255, .1),
+  50: const Color.fromRGBO(0, 0, 0, 16),
   100: const Color.fromRGBO(255, 255, 255, .2),
   200: const Color.fromRGBO(255, 255, 255, .3),
   300: const Color.fromRGBO(255, 255, 255, .4),
@@ -26,7 +26,7 @@ const Color kLightBlueColor = Color(0xFF14C9E7);
 const Color kOrangeColor = Color(0xFFFE6F1D);
 const Color kSecondaryColor = Color(0xFFE61518);
 const Color kBrownColor = Colors.brown;
-const Color kBlackDarkColor = Color(0xFF252525);
+const Color kBlackDarkColor = Color(0xFFCFCFCF);
 const Color kGreyColor = Color(0xFFCECECE);
 const Color kDarkGreyColor = Color.fromARGB(255, 150, 150, 150);
 const Color kTransparent = Colors.transparent;
