@@ -64,7 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: emailController,
                         hintText: "user@gmail.com",
                         lable: "Email",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         isEmail: true,
                       ),
                       const Gap(20),
@@ -75,7 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         isPasswordNo: true,
                         obscure: _obscureText,
                         maxLines: 1,
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         suffixIcon: GestureDetector(
                           onTap: _toggle,
                           child: Icon(

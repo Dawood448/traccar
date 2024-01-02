@@ -1,53 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../Constants/colors.dart';
+import '../../constants/colors.dart';
+
 
 class TextInputFieldWidget extends StatelessWidget {
-  TextInputFieldWidget({
-    Key? key,
-    this.lable,
-    this.suffixIcon,
-    this.prefixIcon,
-    this.cursorsColor = kBlackColor,
-    this.isRequired = true,
-    this.autoFillHints,
-    this.capitalization,
-    this.controller,
-    this.formatter,
-    this.isReadOnly,
-    this.maxLines,
-    this.obscure,
-    this.onChange,
-    this.ontap,
-    this.textInputType,
-    this.validators,
-    this.initialValue,
-    this.hintText,
-    this.autovalidateMode,
-    this.maxLength,
-    this.isDisabled,
-    this.prefixText,
-    this.secondPrefixText,
-    this.onEditingComplete,
-    this.onFieldSubmitted,
-    this.onSaved,
-    this.digitsOnly = false,
-    this.isEmail = false,
-    this.enable,
-    this.isPhoneNo = false,
-    this.width = double.infinity,
-    this.height = 50.0,
-    this.isPasswordNo = false,
-    this.floatingLabelBehavior,
-  }) : super(key: key);
+  TextInputFieldWidget(
+      {Key? key,
+        this.lable,
+        this.suffixIcon,
+        this.prefixIcon,
+        this.cursorsColor = kBlackColor,
+        this.isRequired = true,
+        this.autoFillHints,
+        this.capitalization,
+        this.controller,
+        this.formatter,
+        this.isReadOnly,
+        this.maxLines,
+        this.obscure,
+        this.onChange,
+        this.ontap,
+        this.textInputType,
+        this.validators,
+        this.initialValue,
+        this.hintText,
+        this.autovalidateMode,
+        this.maxLength,
+        this.isDisabled,
+        this.prefixText,
+        this.secondPrefixText,
+        this.onEditingComplete,
+        this.onFieldSubmitted,
+        this.onSaved,
+        this.digitsOnly = false,
+        this.isEmail = false,
+        this.enable,
+        this.isPhoneNo = false,
+        this.width = double.infinity,
+        this.height = 50.0,  this.isPasswordNo=false,
+      })
+      : super(key: key);
   String? lable;
   final Widget? suffixIcon, prefixIcon;
   final Iterable<String>? autoFillHints;
   final TextCapitalization? capitalization;
   final List<TextInputFormatter>? formatter;
   final bool? obscure, isReadOnly, isDisabled;
-  final bool isRequired, isPhoneNo, isEmail, digitsOnly, isPasswordNo;
+  final bool isRequired, isPhoneNo, isEmail, digitsOnly,isPasswordNo;
   final String? Function(String?)? validators;
   final TextEditingController? controller;
   final TextInputType? textInputType;
@@ -64,91 +64,91 @@ class TextInputFieldWidget extends StatelessWidget {
   final RegExp phoneRegex = RegExp(r'^\+?\d{11}$');
   final double width;
   final double height;
-  final FloatingLabelBehavior? floatingLabelBehavior;
   @override
   Widget build(BuildContext context) {
-    TextStyle contentStyle = const TextStyle(
-      fontSize: 15.0,
+    TextStyle contentStyle = TextStyle(
+      fontSize: 12.0,
       fontWeight: FontWeight.normal,
     );
-    return SizedBox(
-      height: 55,
-      child: TextFormField(
-        initialValue: initialValue,
-        autofillHints: autoFillHints,
-        textCapitalization: capitalization ?? TextCapitalization.none,
-        inputFormatters: formatter,
-        obscureText: obscure ?? false ,
-        readOnly: isReadOnly ?? false,
-        validator: (value) {
-          if (isRequired) {
-            if (value == null || value.isEmpty) {
-              return 'Field Required';
+    return TextFormField(
+      initialValue: initialValue,
+      autofillHints: autoFillHints,
+      textCapitalization: capitalization ?? TextCapitalization.none,
+      inputFormatters: formatter,
+      obscureText: obscure ?? false,
+      readOnly: isReadOnly ?? false,
+      validator: (value) {
+        if(isRequired) {
+          if(value == null || value.isEmpty ){
+            return 'Field Required';
+          }
+          if (digitsOnly) {
+            final isDigitsOnly = int.tryParse(value);
+            return isDigitsOnly == null ? 'Digits only' : null;
+          } else if (isEmail) {
+            if (!value.contains("@")) {
+              return "Invalid email";
             }
-            if (digitsOnly) {
-              final isDigitsOnly = int.tryParse(value);
-              return isDigitsOnly == null ? 'Digits only' : null;
-            } else if (isEmail) {
-              if (!value.contains("@")) {
-                return "Invalid email";
-              }
-            } else if (isPhoneNo) {
-              if (!phoneRegex.hasMatch(value)) {
-                return "Invalid Phone Number";
-              }
-            } else if (isPasswordNo) {
-              // Add your password validation logic here
-              if (value.length < 6) {
-                return "Password must be at least 6 characters";
-              }
-              // Add more conditions as needed
+          } else if (isPhoneNo) {
+            if (!phoneRegex.hasMatch(value)) {
+              return "Invalid Phone Number";
             }
           }
-          return null;
-        },
-        enabled: enable,
-        controller: controller,
-        cursorColor: cursorsColor,
-        textAlign: TextAlign.start,
-        onChanged: onChange,
-        maxLines: maxLines,
-        onTap: ontap,
-        onEditingComplete: onEditingComplete,
-        onFieldSubmitted: onFieldSubmitted,
-        onSaved: onSaved,
-        maxLength: maxLength,
-        keyboardType: textInputType,
-        autovalidateMode: autovalidateMode ?? AutovalidateMode.disabled,
-        style: contentStyle,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(left: 20, right: 20),
-          focusColor: Colors.blue,
-          floatingLabelBehavior: floatingLabelBehavior,
-          hintText: hintText,
-          labelText: lable,
+          else if (isPasswordNo) {
+            // Add your password validation logic here
+            if (value.length < 8) {
+              return "Password must be at least 8 characters";
+            }
+            // Add more conditions as needed
+          }
+        }
+        return null;
+      },
+      enabled: enable,
+      controller: controller,
+      cursorColor: cursorsColor,
+      textAlign: TextAlign.start,
+      onChanged: onChange,
+      maxLines: maxLines,
+      onTap: ontap,
+      onEditingComplete: onEditingComplete,
+      onFieldSubmitted: onFieldSubmitted,
+      onSaved: onSaved,
+      maxLength: maxLength,
+      keyboardType: textInputType,
+      autovalidateMode: autovalidateMode ?? AutovalidateMode.disabled,
+      style: contentStyle,
+      decoration: InputDecoration(
 
-          fillColor: Colors.white,
-          border: InputBorder.none,
-          hintStyle: const TextStyle(color: klabelT),
-          errorStyle: const TextStyle(color: Colors.red),
-          // errorBorder: outlineInputBorder,
-          labelStyle: const TextStyle(color: khinttext, fontSize: 15.0),
-          // focusedErrorBorder: outlineInputBorder,
-          // enabledBorder: outlineInputBorder,
-          // focusedBorder: outlineInputActiveBorderBlue,
-          prefixIconConstraints: const BoxConstraints(),
-          counterText: '',
-          prefixText: prefixText,
-          prefixStyle: contentStyle,
-          prefixIcon: lable != null
-              ? Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 5.0),
-                  child: prefixIcon,
-                )
-              : null,
-          suffixIcon: suffixIcon,
-        ),
+        // contentPadding: EdgeInsets.only(left: 10,right: 20),
+        // focusColor: Colors.blue,
+        // floatingLabelBehavior: FloatingLabelBehavior.always,
+        hintText: hintText,
+        labelText: lable,
+        //
+        // fillColor:Colors.white,
+        // border: InputBorder.none,
+        // //hintStyle: const TextStyle(color: AppColor.greyColor),
+        // errorStyle: const TextStyle(color: Colors.red),
+        // // errorBorder: outlineInputBorder,
+        // labelStyle:  TextStyle(color:kMainColor,fontSize: 12.0),
+        // focusedErrorBorder: outlineInputBorder,
+        // enabledBorder: outlineInputBorder,
+        // focusedBorder: outlineInputActiveBorderBlue,
+        prefixIconConstraints: const BoxConstraints(),
+        counterText: '',
+        prefixText: prefixText,
+        prefixStyle: contentStyle,
+        prefixIcon: lable != null
+            ? Padding(
+          padding: const EdgeInsets.only(left: 10.0, right: 5.0),
+          child: prefixIcon,
+        )
+            : null,
+        suffixIcon: suffixIcon,
+
       ),
+
     );
   }
 }

@@ -35,21 +35,33 @@ class AppTheme {
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
+        contentPadding: EdgeInsets.only(left: 10,right: 20),
+        focusColor: Colors.blue,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+
+        fillColor:Colors.white,
+        //hintStyle: const TextStyle(color: AppColor.greyColor),
+        errorStyle: const TextStyle(color: Colors.red),
+        // errorBorder: outlineInputBorder,
+        labelStyle:  TextStyle(color:kMainColor,fontSize: 12.0),
         border: OutlineInputBorder(
-          borderSide: const BorderSide(color: outlineB),
+          borderSide: const BorderSide(color: kMainColor),
           borderRadius: BorderRadius.circular(8),
 
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: outlineB),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: outlineB),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        focusedErrorBorder: outlineInputBorder,
+        enabledBorder: outlineInputBorder,
+        focusedBorder: outlineInputActiveBorder,
+        errorBorder: outlineInputBorder,
+        // contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       ),
     );
   }
 }
+final OutlineInputBorder outlineInputActiveBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(5),
+  borderSide:   BorderSide(color: kMainColor,width: 2), // Green border color
+);
+final OutlineInputBorder outlineInputBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(5),
+    borderSide: BorderSide(color: kMainColor,width: 1));
