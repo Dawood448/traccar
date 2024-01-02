@@ -4,17 +4,38 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import '../../Constants/colors.dart';
 import '../../Constants/colors.dart';
+import '../../Data/Local/hive_storage.dart';
 import '../../Widgets/form_fields/k_text.dart';
+import '../auth_view/login_screen.dart';
 import '../auth_view/signup_screen.dart';
+import '../home_screen/home_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        String? accessToken = LocalStorage.getAccessToken;
+        if (accessToken != null && accessToken.isNotEmpty) {
+          // If token exists, navigate to the home screen
+          Get.offAll(() => const HomeScreen());
+        } else {
+          // If token doesn't exist, navigate to the login screen
+          Get.offAll(() => const LoginScreen());
+        }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(seconds: 3)).then((value) {
-    //   Get.offAll(LoginScreen());
-    // });
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
