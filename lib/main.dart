@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'TracCar',
+      title: 'AirTrack',
       theme: AppTheme.lightTheme(context),
       home: const SplashScreen(),
     );

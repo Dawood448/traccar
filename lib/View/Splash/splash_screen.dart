@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Get.offAll(() => const HomeScreen());
         } else {
           // If token doesn't exist, navigate to the login screen
-          Get.offAll(() => const LoginScreen());
+          // Get.offAll(() => const LoginScreen());
         }
     });
   }
@@ -96,7 +96,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   const Gap(25),
                   GestureDetector(
                     onTap: () {
-                      Get.offAll(const SignUpScreen());
+                      Get.offAll(const LoginScreen());
                     },
                     child: Card(
                       elevation: 5,

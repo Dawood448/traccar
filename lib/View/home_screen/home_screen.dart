@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:traccar/Controller/auth_controller.dart';
+import 'package:traccar/View/Splash/splash_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -25,6 +28,9 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(onPressed: (){
+        AuthController().logOut().then((value) => Get.offAll(const SplashScreen()));
+      }, label: Text("LOG OUT")),
     );
   }
 }
