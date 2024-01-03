@@ -1,106 +1,13 @@
-import 'dart:developer';
-import 'package:dio/dio.dart';
+
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../Constants/colors.dart';
-import 'logging.dart';
+import '../Widgets/form_fields/k_text.dart';
 
-class Common {
-  static void showDioErrorDialog(BuildContext context,
-      {required DioException e}) {
-    showAdaptiveDialog(
-      context: context,
-      builder: (context) => AlertDialog.adaptive(
-        title: const Text('Oops!'),
-        content: Text(getErrorMsgOfDio(e)),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Got it!'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  static String getErrorMsgOfDio(DioException e) {
-    try {
-      Logger.error(
-          'Status Code: ${e.response?.statusCode} - Body: ${e.response?.data}');
-      String errorMsg = 'Please, check your internet connection';
-      if (e.response?.statusCode == 406) {
-        errorMsg = '${e.response?.data}';
-      } else if (e.response != null && e.response!.data != null) {
-        log('*****');
-        if (e.response!.data.runtimeType == String) {
-          errorMsg = e.response!.data;
-        } else if (e.response!.data['detail'] != null) {
-          log('121');
-          errorMsg = e.response!.data['detail'].toString();
-        } else if (e.response!.data['message'] != null) {
-          log('121');
-          errorMsg = e.response!.data['message'].toString();
-        } else if (e.response?.data['error'] != null) {
-          log('111');
-          errorMsg = e.response!.data['error'].toString();
-        } else {
-          log('2222');
-          errorMsg = e.response!.data.toString();
-        }
-      } else if (e.message != null) {
-        log('23452');
-        errorMsg = e.message!;
-      }
-      return errorMsg;
-    } catch (e) {
-      Logger.error('Errorexxx: $e');
-      return 'Something went wrong';
-    }
-  }
-
-  static Future<bool?> showOkCancelAdaptiveDialog(
-    BuildContext context, {
-    String? title,
-    Widget? content,
-    String? okLabel,
-    String? cancelLabel,
-    bool isDestructveAction = false,
-    bool isPrimaryAction = false,
-  }) async {
-    return showAdaptiveDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog.adaptive(
-            title: title != null ? Text(title) : null,
-            content: content,
-            actions: [
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: black,
-                ),
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(
-                  cancelLabel ?? 'Cancel',
-                  style: const TextStyle(fontWeight: FontWeight.w300),
-                ),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: isDestructveAction ? kSecondaryColor : null,
-                ),
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text(
-                  okLabel ?? 'Ok',
-                  style: TextStyle(
-                      fontWeight: isPrimaryAction ? FontWeight.w500 : null),
-                ),
-              ),
-            ],
-          );
-        });
-  }
-}
 class AppSnackbar {
   static void showErrorSnackBar(String message) {
     Get.snackbar(
@@ -151,5 +58,82 @@ class AppSnackbar {
       borderRadius: 10,
       duration: const Duration(seconds: 3),
     );
+  }
+}
+
+class Utils{
+  static toastMessage(String message){
+    Fluttertoast.showToast(
+      msg: message ,
+      backgroundColor: kErrorColor ,
+      textColor: kWhiteColor,
+      gravity: ToastGravity.BOTTOM,
+      toastLength: Toast.LENGTH_LONG,
+    );
+  }
+  static toastMessageCenter(String message){
+    Fluttertoast.showToast(
+      msg: message ,
+      backgroundColor: kErrorColor ,
+      gravity: ToastGravity.CENTER,
+      toastLength: Toast.LENGTH_LONG,
+      textColor: kWhiteColor,
+    );
+  }
+  static snackBar(String title, String message){
+    Get.snackbar(
+        title,
+        message ,
+        backgroundColor: kWhiteColor.withOpacity(0.7)
+    );
+  }
+}
+Future<OkCancelResult> errorOverlay(BuildContext context,
+    {String? title, String? message, String? okLabel}) async {
+  return await showOkAlertDialog(
+      context: context, title: title, message: message, okLabel: okLabel);
+}
+
+Future<dynamic> loadingOverlay(BuildContext context) {
+  return showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => Dialog(
+      backgroundColor: kTransparent,
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      child: CircleAvatar(
+        radius: 60,
+        backgroundColor: kWhiteColor,
+        child: Lottie.asset('assets/images/loading.json'),
+      ),
+    ),
+  );
+}
+
+Future<dynamic> loadingStatusDialog(BuildContext context,
+    {required String title}) {
+  return showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => Dialog(
+      backgroundColor: kWhiteColor,
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
+        const LoadingWidget(height: 70),
+        KText(text: title, fontWeight: FontWeight.bold, fontSize: 16),
+        const SizedBox(width: 8)
+      ]),
+    ),
+  );
+}
+
+class LoadingWidget extends StatelessWidget {
+  const LoadingWidget({Key? key, this.height}) : super(key: key);
+  final double? height;
+  @override
+  Widget build(BuildContext context) {
+    return Lottie.asset('assets/animations/loading.json', height: height);
   }
 }

@@ -5,6 +5,7 @@ class LoginModel {
   String? cookieData;
   User? user;
   int? userRole;
+  bool? isLogin;
 
   LoginModel(
       {this.status,
@@ -12,7 +13,7 @@ class LoginModel {
         this.token,
         this.cookieData,
         this.user,
-        this.userRole});
+        this.userRole, this.isLogin});
 
   LoginModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];

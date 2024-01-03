@@ -124,14 +124,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       FilledButton(
                         onPressed: () {
                           if (_formkey.currentState!.validate()) {
-                            kOverlayWithAsync(asyncFunction: () async {
-                              await _authController.signUp(context,
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                  name: nameController.text,
-                                  confirmPassword:
-                                      confirmPasswordController.text);
-                            });
+                             _authController.signUp(context,
+                                email: emailController.text,
+                                password: passwordController.text,
+                                name: nameController.text,
+                                confirmPassword:
+                                confirmPasswordController.text);
                           }
                         },
                         child: KText(

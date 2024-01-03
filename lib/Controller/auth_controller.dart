@@ -1,15 +1,16 @@
-import 'dart:convert';
+
 import 'dart:developer';
-import 'package:dio/dio.dart';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:traccar/Controller/user_preferences/user_preferences.dart';
+import 'package:traccar/Data/Network/network_api_services.dart';
+import 'package:traccar/Utils/common.dart';
+import 'package:traccar/View/Splash/splash_screen.dart';
 import 'package:traccar/model/login_model/login_model.dart';
 import '../Constants/api.dart';
-import '../Data/Local/hive_storage.dart';
-import '../Data/Network/request_client.dart';
-import '../Utils/common.dart';
 import '../Utils/logging.dart';
 import '../View/home_screen/home_screen.dart';
 
@@ -22,7 +23,8 @@ class AuthController extends GetxController {
     checkAuth();
     super.onInit();
   }
-
+final _apiService = NetworkApiServices();
+UserPreference userPreference = UserPreference();
   // Future<void> setUser(User userData) async {
   //   user = userData;
   //   await LocalStorage.setUser(userData.id, userData.token);
@@ -31,90 +33,94 @@ class AuthController extends GetxController {
 
   Future<void> checkAuth() async {
     try {
-      String? accessToken = LocalStorage.getAccessToken;
-      if (accessToken != null) {
-        // print(accessToken);
-        Get.offAll(const HomeScreen());
-        // var response = await NetworkClient.get(Apis.currentUser);
-        // routeOnUser(response);
-      } else {
-        await logOut();
-      }
-    } on DioException catch (e) {
-      Logger.message('Error: ${e.toString()}');
-      await logOut();
+      userPreference.getUser().then((value) async {
+        if(value.token != null ){
+          Get.offAll(HomeScreen());
+        }
+        else{
+          await logOut();
+        }
+      });
     } catch (error) {
       Logger.message('Error: `${error.toString()}');
       await logOut();
     }
   }
 
-  Future<void> signUp(BuildContext context,
+  Future<dynamic> signUp(BuildContext context,
       {required String email,
       required String name,
       required String password,
       required String confirmPassword}) async {
     try {
-      final response = await NetworkClient.post(
+      loadingStatusDialog(context, title: "Signing up");
+      Map<String, dynamic> data = {
+        "email": email,
+        "name": name,
+        "confirmed": confirmPassword,
+        "password": password
+      };
+      final response = await _apiService.postApi(
+        data,
         Apis.signUp,
-        data: {
-          "email": email,
-          "name": name,
-          "confirmed": confirmPassword,
-          "password": password
-        },
-        isTokenRequired: false,
       );
-      Logger.message('Status Code: ${response.statusCode}');
-      if (response.statusCode != 200) {
-        Logger.error('Login Failed');
-        return;
+      Logger.message('SignUp Response: ${response}');
+      if (response["status"] == false) {
+        Get.back();
+        Logger.error('Signup Failed');
+        errorOverlay(context,message: response["message"],title: 'Error!',okLabel: 'OK');
+      }else
+      {
+        Get.back();
+        var model = LoginModel.fromJson(response.body);
+        userPreference
+            .saveUser(model)
+            .then((value) => Get.offAll(HomeScreen()));
       }
-
-      var model = LoginModel.fromJson(response.data);
-      LocalStorage.setUser(model.user!.id.toString(), model.token);
-      Get.offAll(const HomeScreen());
-      // routeOnUser(response);
-    } on DioException catch (e) {
+    } on SocketException catch (e) {
+      Get.back();
       Logger.message('Error: $e');
-      if (context.mounted) Common.showDioErrorDialog(context, e: e);
+      errorOverlay(context, title: "Signup Error", message: e.message, okLabel: "OK");
     } catch (error) {
+      Get.back();
       Logger.message('Error: `${error.toString()}');
+      errorOverlay(context, title: "Signup Error", message: "Something went Wrong", okLabel: "OK");
     }
   }
 
-  Future<void> signIn(
+  Future<dynamic> signIn(
     BuildContext context, {
     required String email,
     required String password,
   }) async {
     try {
+      loadingStatusDialog(context, title: "Signing in");
+      Map<String, dynamic> data = {"email": email, "password": password};
       print(Apis.login);
-      final response = await NetworkClient.post(
-        Apis.login,
-        data: {"email": email, "password": password},
-        isTokenRequired: false,
-      );
-
-      Logger.message('Status Code: ${response.statusCode}');
-      if (response.statusCode != 200) {
+      final response = await _apiService.postApi(data, Apis.login);
+      Logger.message('Status Code: ${response}');
+      if (response["status"] == false) {
+        Get.back();
         Logger.error('Login Failed');
-        return;
       }
-
-      var model = LoginModel.fromJson(response.data);
-      LocalStorage.setUser(model.user!.id.toString(), model.token);
-      Get.offAll(const HomeScreen());
+      Get.back();
+      var model = LoginModel.fromJson(response);
+      userPreference.saveUser(model).then((value) =>{
+        Get.offAll(const HomeScreen())
+      });
       // routeOnUser(response);
-    } on DioException catch (e) {
+    } on SocketException catch (e) {
+      Get.back();
       Logger.message('Error: $e');
-      if (context.mounted) Common.showDioErrorDialog(context, e: e);
+      errorOverlay(context, title: "Sign In Failed", message: e.message, okLabel: "OK");
     } catch (error) {
+      Get.back();
       Logger.message('Error: `${error.toString()}');
+      errorOverlay(context, title: "Sign In Failed", message: "Something went Wrong", okLabel: "OK");
     }
   }
 
-  Future<void> signInWithGoogle(
+  Future<dynamic> signInWithGoogle(
     BuildContext context,
   ) async {
     try {
@@ -134,59 +140,35 @@ class AuthController extends GetxController {
         print('Photo Url: ${googleUser?.photoUrl}');
         print('ID: ${googleUser?.id}');
       }
-
-      final response = await NetworkClient.post(
+      loadingStatusDialog(context, title: "loading");
+      final response = await _apiService.postApi(
+        {"name": googleUser?.displayName, "email": googleUser?.email},
         Apis.socialSignIn,
-        data: {"name": googleUser?.displayName, "email": googleUser?.email},
       );
-      if (response.statusCode == 200) {
-        LocalStorage.setUser(
-            googleAuth.idToken.toString(), googleAuth.accessToken);
-        Get.to(const HomeScreen());
+      if (response['status'] == true) {
+        Get.back();
+        LoginModel model = LoginModel.fromJson(response);
+        userPreference.saveUser(model).then((value) => Get.offAll(HomeScreen()));
+      }
+      else{
+        Get.back();
       }
       // print(response.data);
       // routeOnUser(response);
-    } on DioException catch (e) {
-      log('${e.error} \n ${e.message} \n ${e.response} \n ${e.type}'
-          .toString());
-      // ignore: use_build_context_synchronously
-      Common.showDioErrorDialog(context, e: e);
+    } on SocketException catch (e) {
+      Get.back();
+      errorOverlay(context, title: "Sign In Failed", message: e.message, okLabel: "OK");
     } catch (error) {
       Logger.message(error.toString());
       // ignore: use_build_context_synchronously
-      await showAdaptiveDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog.adaptive(
-              title: Text('Exception: $error'),
-            );
-          });
+      errorOverlay(context, title: "Sign In Failed", message: "Something Went Wrong", okLabel: "OK");
     }
   }
 
   Future<void> logOut() async {
-    await LocalStorage.setUserId(null);
-    await LocalStorage.setAccessToken(null);
+    userPreference.removeUser().then((value) => {
+      Get.offAll(SplashScreen())
+    });
   }
 
-// Future<void> forgetPass(BuildContext context, {required String email}) async {
-//   try {
-//     print(Apis.forgotPass);
-//     final response = await NetworkClient.post(
-//       Apis.forgotPass,
-//       data: {"email": email},
-//     );
-//     Logger.message('Status Code: ${response.statusCode}');
-//     print("${response.data}");
-//
-//     Get.to(() => OTPView(
-//           secret: response.data['secret'],
-//         ));
-//   } on DioException catch (e) {
-//     Logger.message('Error: $e');
-//     if (context.mounted) Common.showDioErrorDialog(context, e: e);
-//   } catch (error) {
-//     Logger.message('Error: `${error.toString()}');
-//   }
-// }
 }

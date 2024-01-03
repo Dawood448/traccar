@@ -1,4 +1,6 @@
 
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -42,6 +44,7 @@ class _InputDateSelectionTextFieldState
             return "Select Date";
           }
         }
+        return null;
       },
       controller: widget.controller,
       cursorColor: kBlackColor,

@@ -7,7 +7,6 @@ import 'package:traccar/View/auth_view/signup_screen.dart';
 import 'package:traccar/Widgets/form_fields/k_text.dart';
 import 'package:traccar/Widgets/form_fields/k_text_field.dart';
 import '../../Controller/auth_controller.dart';
-import '../../Utils/over_lay.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -62,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Gap(30),
                       TextInputFieldWidget(
                         controller: emailController,
+                        textInputType: TextInputType.emailAddress,
                         hintText: "user@gmail.com",
                         lable: "Email",
                         isEmail: true,
@@ -109,11 +109,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       FilledButton(
                         onPressed: () {
                           if (_formkey.currentState!.validate()) {
-                            kOverlayWithAsync(asyncFunction: () async {
-                              await AuthController().signIn(context,
-                                  email: emailController.text,
-                                  password: passwordController.text);
-                            });
+                            AuthController().signIn(context,
+                                email: emailController.text,
+                                password: passwordController.text);
                           }
                         },
                         child: KText(
@@ -126,9 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Gap(20),
                       OutlinedButton(
                         onPressed: () async {
-                          kOverlayWithAsync(asyncFunction: () async {
-                            await AuthController().signInWithGoogle(context);
-                          });
+                          await AuthController().signInWithGoogle(context);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
