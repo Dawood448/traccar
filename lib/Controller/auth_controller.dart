@@ -165,6 +165,32 @@ UserPreference userPreference = UserPreference();
     }
   }
 
+  Future<dynamic> resetPassword(BuildContext context,  {required String email}) async{
+    try {
+      loadingStatusDialog(context, title: "Sending...");
+      Map<String, dynamic> data = {"email": email,};
+      print(Apis.resetPassword);
+      final response = await _apiService.postApi(data, Apis.resetPassword);
+      Logger.message('Api Response: ${response}');
+      if (response["status"] == false) {
+        Get.back();
+        Logger.error('Login Failed');
+        errorOverlay(context, title: "Error!", message: response["message"], okLabel: "OK");
+      }
+      else{
+        Utils.snackBar("Reset Password", response["message"]);
+        Get.close(2);
+      }
+    } on SocketException catch (e) {
+      Get.back();
+      Logger.message('Error: $e');
+      errorOverlay(context, title: "Sign In Failed", message: e.message, okLabel: "OK");
+    } catch (error) {
+      Get.back();
+      Logger.message('Error: `${error.toString()}');
+      errorOverlay(context, title: "Sign In Failed", message: "Something went Wrong", okLabel: "OK");
+    }
+  }
   Future<void> logOut() async {
     userPreference.removeUser().then((value) => {
       Get.offAll(SplashScreen())

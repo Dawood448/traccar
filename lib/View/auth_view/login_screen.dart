@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:traccar/Constants/colors.dart';
+import 'package:traccar/View/auth_view/reset_password_screen.dart';
 import 'package:traccar/View/auth_view/signup_screen.dart';
 import 'package:traccar/Widgets/form_fields/k_text.dart';
 import 'package:traccar/Widgets/form_fields/k_text_field.dart';
@@ -94,7 +95,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.normal,
                             ),
                             TextButton(
-                              onPressed: () async {},
+                              onPressed: () async {
+                                Get.to(ResetPasswordScreen());
+                              },
                               child: KText(
                                 text: "Reset",
                                 fontSize: 12,

@@ -5,6 +5,7 @@ class Apis {
   static String socialSignIn = "${baseUrl}auth/socialSignIn";
   static String login = "${baseUrl}auth/login";
   static String signUp = "${baseUrl}auth/register";
+  static String resetPassword = "${baseUrl}auth/user/forgot/password";
 
 
 
