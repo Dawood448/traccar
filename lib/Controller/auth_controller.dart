@@ -103,11 +103,13 @@ UserPreference userPreference = UserPreference();
         Get.back();
         Logger.error('Login Failed');
       }
-      Get.back();
-      var model = LoginModel.fromJson(response);
-      userPreference.saveUser(model).then((value) =>{
-        Get.offAll(const HomeScreen())
-      });
+      else{
+        Get.back();
+        var model = LoginModel.fromJson(response);
+        userPreference.saveUser(model).then((value) =>{
+          Get.offAll(const HomeScreen())
+        });
+      }
       // routeOnUser(response);
     } on SocketException catch (e) {
       Get.back();
